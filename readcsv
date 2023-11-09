@@ -1,0 +1,32 @@
+#include <stdio.h>
+#include <stdint.h>
+
+#define MAX_ROWS 1000  // 事前に定義する最大行数
+#define MAX_LINE_LENGTH 1024
+
+int main() {
+    FILE *file = fopen("data.csv", "r");
+    if (file == NULL) {
+        perror("ファイルを開けませんでした");
+        return -1;
+    }
+
+    uint16_t uint16_array[MAX_ROWS];
+    int16_t int16_array[MAX_ROWS];
+    char line[MAX_LINE_LENGTH];
+    int row_count = 0;
+
+    while (fgets(line, MAX_LINE_LENGTH, file) && row_count < MAX_ROWS) {
+        sscanf(line, "%hu,%hd", &uint16_array[row_count], &int16_array[row_count]);
+        row_count++;
+    }
+
+    fclose(file);
+
+    // 配列の使用例
+    for (int i = 0; i < row_count; i++) {
+        printf("Row %d: uint16=%hu, int16=%hd\n", i, uint16_array[i], int16_array[i]);
+    }
+
+    return 0;
+}
